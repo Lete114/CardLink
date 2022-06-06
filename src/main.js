@@ -166,17 +166,13 @@ function getInfo(el, html, link) {
     el.parentNode.replaceChild(dom, el)
   }
 }
-
 /**
  * Create card links
  * @param {NodeList} nodes A collection of nodes or a collection of arrays, if it is an array then the array must always contain node element
  */
 export default function cardLink(nodes) {
   // If the `nodes` do not contain a `forEach` method, then the default `a[cardlink]` is used
-  nodes =
-    'forEach' in (nodes || {})
-      ? nodes
-      : document.querySelectorAll('a[cardlink]')
+  nodes = 'forEach' in (nodes || {}) ? nodes : document.querySelectorAll('a[cardlink]')
   nodes.forEach((el) => {
     // If it is not a tag element then it is not processed
     if (el.nodeType !== 1) return
