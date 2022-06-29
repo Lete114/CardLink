@@ -97,3 +97,7 @@ const cardLink = require('cardlink')
 默认值: `document.querySelectorAll('a[cardlink]')`
 
 默认会对页面上所有`a[cardlink]`生成卡片链接
+
+## 效果图
+
+![card-link](https://user-images.githubusercontent.com/48512251/176334068-9eaaefeb-baa1-4a45-8dd8-7d0cbe6c6f29.png)
