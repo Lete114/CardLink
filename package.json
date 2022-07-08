@@ -1,0 +1,25 @@
+{
+  "name": "cardlink-server",
+  "main": "main.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:hot": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lete114/CardLink.git"
+  },
+  "author": "Lete乐特",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Lete114/CardLink/issues"
+  },
+  "homepage": "https://github.com/Lete114/CardLink#readme",
+  "dependencies": {
+    "body-data": "^1.0.5",
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
