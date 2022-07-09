@@ -1,6 +1,8 @@
 .card-link {
   position: relative;
-  width: 400px;
+  width: 100%;
+  min-width: 200px;
+  max-width: 400px;
   height: 80px;
   margin: 20px auto;
   border-radius: 12px;
