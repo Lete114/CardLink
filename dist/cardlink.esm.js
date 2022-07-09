@@ -175,7 +175,7 @@ function fetchPage(link, callback) {
   }).then(callback)["catch"](function (error) {
     var server = cardLink.server; // eslint-disable-next-line no-console
 
-    if (!server) return console.error('CardLink Error:', error);
+    if (link.includes(server) || !server) return console.error('CardLink Error:', error);
     fetchPage(server + link, callback);
   });
 }
