@@ -150,7 +150,8 @@ function getInfo(el, html, link) {
     title = title.textContent; // Get the src of the first img tag in the body tag
 
     icon = doc.querySelector('body img');
-    icon = icon && icon.getAttribute('src'); // If there is no src then get the site icon
+    icon = icon && icon.getAttribute('src');
+    if (/^data:image/.test(icon)) icon = ''; // If there is no src then get the site icon
 
     if (!icon) {
       var links = [].slice.call(doc.querySelectorAll('link[rel][href]'));

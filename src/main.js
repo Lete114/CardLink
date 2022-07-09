@@ -147,6 +147,9 @@ function getInfo(el, html, link) {
     // Get the src of the first img tag in the body tag
     icon = doc.querySelector('body img')
     icon = icon && icon.getAttribute('src')
+
+    if (/^data:image/.test(icon)) icon = ''
+
     // If there is no src then get the site icon
     if (!icon) {
       const links = [].slice.call(doc.querySelectorAll('link[rel][href]'))
