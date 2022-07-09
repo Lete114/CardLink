@@ -166,6 +166,19 @@ function getInfo(el, html, link) {
     el.parentNode.replaceChild(dom, el)
   }
 }
+
+function fetchPage(link, callback) {
+  fetch(link)
+    .then((result) => result.text())
+    .then(callback)
+    .catch((error) => {
+      const server = cardLink.server
+      // eslint-disable-next-line no-console
+      if (!server) return console.error('CardLink Error:', error)
+      fetchPage(server + link, callback)
+    })
+}
+
 /**
  * Create card links
  * @param {NodeList} nodes A collection of nodes or a collection of arrays, if it is an array then the array must always contain node element
@@ -179,11 +192,9 @@ export default function cardLink(nodes) {
     el.removeAttribute('cardlink')
     const link = el.href
     if (isHttp(link)) {
-      fetch(link)
-        .then((result) => result.text())
-        .then((html) => {
-          getInfo(el, html, link)
-        })
+      fetchPage(link, (html) => {
+        getInfo(el, html, link)
+      })
     }
   })
 }

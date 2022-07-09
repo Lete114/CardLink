@@ -168,6 +168,17 @@ function getInfo(el, html, link) {
     el.parentNode.replaceChild(dom, el);
   }
 }
+
+function fetchPage(link, callback) {
+  fetch(link).then(function (result) {
+    return result.text();
+  }).then(callback)["catch"](function (error) {
+    var server = cardLink.server; // eslint-disable-next-line no-console
+
+    if (!server) return console.error('CardLink Error:', error);
+    fetchPage(server + link, callback);
+  });
+}
 /**
  * Create card links
  * @param {NodeList} nodes A collection of nodes or a collection of arrays, if it is an array then the array must always contain node element
@@ -184,9 +195,7 @@ function cardLink(nodes) {
     var link = el.href;
 
     if (isHttp(link)) {
-      fetch(link).then(function (result) {
-        return result.text();
-      }).then(function (html) {
+      fetchPage(link, function (html) {
         getInfo(el, html, link);
       });
     }

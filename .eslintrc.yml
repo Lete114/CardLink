@@ -27,7 +27,7 @@ rules:
   eol-last: [error, always] ## 强制使用换行 (LF)
   eqeqeq: [error, smart] ## https://cn.eslint.org/docs/rules/eqeqeq#smart
   max-depth: [error, 3] ## 强制块语句的最大可嵌套深度
-  max-len: [warn, 800] ## 强制行的最大长度
+  max-len: [warn, 120] ## 强制行的最大长度
   max-statements: [warn, 20] ## 限制函数块中的语句的最大数量
   new-cap: [warn, { capIsNew: false }] ## 要求构造函数首字母大写
   no-extend-native: error ## 禁止扩展原生类型

@@ -40,6 +40,8 @@ CommonJS 模块
 const cardLink = require('cardlink')
 ```
 
+浏览器
+
 1. 使用方法
 
 ```html
@@ -57,34 +59,30 @@ const cardLink = require('cardlink')
   document.querySelectorAll('article a[target=_blank]').forEach((el) => {
     el.setAttribute('cardlink', '')
   })
+
+  // 或
   document.querySelector('a#example').setAttribute('cardlink', '')
+
   // 默认会对页面上所有a[cardlink]生成卡片链接
   cardLink()
 </script>
 ```
 
-3. 使用方法
+## 存在的问题
+
+> [server](https://github.com/Lete114/CardLink/tree/server) 分支有一个例子
+
+由于这是前端发送请求获取 HTML，可能部分网站会存在跨域 (CORS) 问题，所以 `cardLink` 允许你使用代理服务器去请求目标网站的 HTML
 
 ```html
 <script>
-  // 传入一个数组，且数组中是标签元素
-  const a1 = document.createElement('a')
-  a1.href = 'https://example.com/'
-  const a2 = document.createElement('a')
-  a2.href = 'https://www.example.com/'
+  // 注意: 只有发生跨域请求时，cardLink 才会将请求发送到代理服务器(以此可以减轻代理服务器的压力)
+  // 在执行 cardLink 之前预设代理服务器
+  cardLink.server = 'https://api.allorigins.win/raw?url='
+  // cardLink.server = 'https://cardlink-server.deta.dev/?url='
 
-  // 如果你担心这会影响页面正常的显示效果，可以将其隐藏
-  a1.style.visibility = 'hidden'
-  a2.style.visibility = 'hidden'
-  // or
-  // a1.style.display = 'none'
-  // a2.style.display = 'none'
-
-  // 必须先将元素添加到页面上
-  document.body.appendChild(a1)
-  document.body.appendChild(a2)
-
-  cardLink([a1, a2])
+  // 为<article></article>(文章)标签下所有打开新标签窗口的a标签生成卡片链接
+  cardLink(document.querySelectorAll('article a[target=_blank]'))
 </script>
 ```
 

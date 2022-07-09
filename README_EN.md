@@ -40,6 +40,8 @@ CommonJS Modules
 const cardLink = require('cardlink')
 ```
 
+Browser
+
 1. Usage
 
 ```html
@@ -56,34 +58,29 @@ const cardLink = require('cardlink')
   document.querySelectorAll('article a[target=_blank]').forEach((el) => {
     el.setAttribute('cardlink', '')
   })
+
+  // OR
   document.querySelector('a#example').setAttribute('cardlink', '')
+
   // By default, card links are generated for all `a[cardlink]` on the page
   cardLink()
 </script>
 ```
 
-3. Usage
+## Problems
+
+> The [server](https://github.com/Lete114/CardLink/tree/server)  branch has an example
+
+Since this is a front-end request for HTML, some sites may have cross-domain (CORS) issues, so `cardLink` allows you to use a proxy server to request HTML from the target site
 
 ```html
 <script>
-  // Pass in an array and the array is label elements
-  const a1 = document.createElement('a')
-  a1.href = 'https://example.com/'
-  const a2 = document.createElement('a')
-  a2.href = 'https://www.example.com/'
+  // Note: cardLink sends requests to the proxy server only when cross-domain requests occur (thus reducing the pressure on the proxy server)
+  // Preset the proxy server before executing cardLink
+  cardLink.server = 'https://api.allorigins.win/raw?url='
+  // cardLink.server = 'https://cardlink-server.deta.dev/?url='
 
-  // If you are concerned that this will affect the normal display of the page, you can hide it
-  a1.style.visibility = 'hidden'
-  a2.style.visibility = 'hidden'
-  // or
-  // a1.style.display = 'none'
-  // a2.style.display = 'none'
-
-  // Elements must first be added to the page
-  document.body.appendChild(a1)
-  document.body.appendChild(a2)
-
-  cardLink([a1, a2])
+  cardLink(document.querySelectorAll('article a[target=_blank]'))
 </script>
 ```
 
