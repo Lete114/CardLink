@@ -9,6 +9,7 @@
 
 <p align="center">
     <a href="https://github.com/Lete114/CardLink/releases/"><img src="https://img.shields.io/npm/v/cardlink?logo=npm" alt="Version"></a>
+    <a href="https://github.com/Lete114/visitor-badge"><img src="https://visitor_badge.deta.dev/?pageID=github.Lete114.CardLink" alt="visitor_badge"></a>
     <a href="https://github.com/Lete114/CardLink/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/cardlink?color=FF5531" alt="MIT License"></a>
 </p>
 
