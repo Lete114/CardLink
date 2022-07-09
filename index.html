@@ -90,7 +90,7 @@
       url.oninput = function () {
         localStorage.url = url.value
       }
-      url.value = localStorage.url||''
+      url.value = localStorage.url || ''
       function generate() {
         if (!/^https?:\/\//.test(url.value)) return
         var a = document.createElement('a')
