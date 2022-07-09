@@ -1,6 +1,6 @@
 {
   "name": "cardlink",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0-beta.1",
   "description": "为页面上的超链接生成卡片式链接 | Generate card-based links for hyperlinks on the page",
   "main": "dist/cardlink.cjs.js",
   "module": "dist/cardlink.esm.js",
