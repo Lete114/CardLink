@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CardLink</title>
+    <script src="./cardlink.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-width: 400px;
+      }
+      .container {
+        margin: 0 auto;
+        width: 800px;
+        height: 100%;
+        padding: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .title {
+        margin: 50px 0;
+        text-align: center;
+      }
+      .title svg {
+        width: 1.5em;
+        height: 1.5em;
+        margin-right: 0.2em;
+        vertical-align: bottom;
+      }
+      .url {
+        outline: none;
+        font-size: 18px;
+        padding: 10px 10px 10px 5px;
+        position: relative;
+        max-width: 300px;
+        border: none;
+        border-bottom: 2px solid #bfbfbf;
+        transition: 0.2s ease transform;
+      }
+      .url:focus {
+        border-bottom: 2px solid #00bfb3;
+        transition: 0.2s ease transform;
+      }
+      .btn {
+        line-height: 38px;
+        background-color: #00bfb3;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        padding: 5px;
+        width: 160px;
+        margin: 30px 0;
+      }
+
+      @media (max-width: 820px) {
+        .container {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="title">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M5.327 18.883a3.005 3.005 0 010-4.25l2.608-2.607a.75.75 0 10-1.06-1.06l-2.608 2.607a4.505 4.505 0 006.37 6.37l2.608-2.607a.75.75 0 00-1.06-1.06l-2.608 2.607a3.005 3.005 0 01-4.25 0zm5.428-11.799a.75.75 0 001.06 1.06L14.48 5.48a3.005 3.005 0 014.25 4.25l-2.665 2.665a.75.75 0 001.061 1.06l2.665-2.664a4.505 4.505 0 00-6.371-6.372l-2.665 2.665zm5.323 2.117a.75.75 0 10-1.06-1.06l-7.072 7.07a.75.75 0 001.061 1.06l7.071-7.07z"
+          ></path>
+        </svg>
+        CardLink 卡片式链接
+      </h1>
+      <input class="url" type="text" placeholder="https:// | http://" />
+      <button class="btn" onclick="generate()">generate</button>
+    </div>
+    <script>
+      cardLink.server = 'https://cardlink-server.deta.dev/?url='
+      var url = document.querySelector('.url')
+      url.oninput = function () {
+        localStorage.url = url.value
+      }
+      url.value = localStorage.url||''
+      function generate() {
+        if (!/^https?:\/\//.test(url.value)) return
+        var a = document.createElement('a')
+        a.href = url.value
+        a.setAttribute('cardlink', '')
+        a.setAttribute('target', '_blank')
+        document.querySelector('.container').appendChild(a)
+        cardLink()
+      }
+    </script>
+  </body>
+</html>
