@@ -156,6 +156,7 @@ function getInfo(el, html, link) {
       icon = links.find(function (el) {
         return el.rel.includes('icon');
       });
+      if (!icon) return;
       icon = icon.href;
     } // If `icon` is not the ['https://', 'http://', '//'] protocol, splice on the `origin` of the a tag
 

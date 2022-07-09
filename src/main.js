@@ -154,6 +154,7 @@ function getInfo(el, html, link) {
     if (!icon) {
       const links = [].slice.call(doc.querySelectorAll('link[rel][href]'))
       icon = links.find((el) => el.rel.includes('icon'))
+      if (!icon) return
       icon = icon.href
     }
 
