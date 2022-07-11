@@ -59,6 +59,7 @@
   width: 60px;
   height: 60px;
   margin: 0 0 0 8px;
-  border-radius: 6px;
   overflow: hidden;
+  border-radius: 6px;
+  object-fit: contain;
 }
