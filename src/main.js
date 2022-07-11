@@ -153,9 +153,8 @@ function getInfo(el, html, link) {
     // If there is no src then get the site icon
     if (!icon) {
       const links = [].slice.call(doc.querySelectorAll('link[rel][href]'))
-      icon = links.find((el) => el.rel.includes('icon'))
-      if (!icon) return
-      icon = icon.href
+      icon = links.find((_el) => _el.rel.includes('icon'))
+      icon = icon && icon.getAttribute('href')
     }
 
     // If `icon` is not the ['https://', 'http://', '//'] protocol, splice on the `origin` of the a tag

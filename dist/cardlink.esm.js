@@ -153,11 +153,10 @@ function getInfo(el, html, link) {
 
     if (!icon) {
       var links = [].slice.call(doc.querySelectorAll('link[rel][href]'));
-      icon = links.find(function (el) {
-        return el.rel.includes('icon');
+      icon = links.find(function (_el) {
+        return _el.rel.includes('icon');
       });
-      if (!icon) return;
-      icon = icon.href;
+      icon = icon && icon.getAttribute('href');
     } // If `icon` is not the ['https://', 'http://', '//'] protocol, splice on the `origin` of the a tag
 
 
