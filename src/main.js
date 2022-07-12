@@ -4,6 +4,8 @@ const style = createElement('style')
 style.textContent = styles
 document.head.appendChild(style)
 
+cardLink.cache = {}
+
 /**
  * Determine if it is a ['https://', 'http://', '//'] protocol
  * @param {String} url Website url
@@ -129,6 +131,16 @@ function createDOM(title, link, icon) {
   return wrapDOM
 }
 
+function renderer(el, title, link, icon) {
+  const dom = createDOM(title, link, icon)
+
+  // Reset the attribute
+  Array.from(el.attributes).forEach((attr) => {
+    dom.querySelector('a').setAttribute(attr.name, attr.value)
+  })
+  el.parentNode.replaceChild(dom, el)
+}
+
 /**
  * Get info
  * @param {Element} el Element
@@ -137,36 +149,37 @@ function createDOM(title, link, icon) {
  */
 // eslint-disable-next-line max-statements
 function getInfo(el, html, link) {
-  let title, icon
-  const doc = new DOMParser().parseFromString(html, 'text/html')
-  // If there is no title, no card link is generated
-  title = doc.querySelector('title')
-  if (title) {
-    title = title.textContent
+  try {
+    let title, icon
+    const doc = new DOMParser().parseFromString(html, 'text/html')
+    // If there is no title, no card link is generated
+    title = doc.querySelector('title')
+    if (title) {
+      title = title.textContent
 
-    // Get the src of the first img tag in the body tag
-    icon = doc.querySelector('body img')
-    icon = icon && icon.getAttribute('src')
+      // Get the src of the first img tag in the body tag
+      icon = doc.querySelector('body img')
+      icon = icon && icon.getAttribute('src')
 
-    if (/^data:image/.test(icon)) icon = ''
+      if (/^data:image/.test(icon)) icon = ''
 
-    // If there is no src then get the site icon
-    if (!icon) {
-      const links = [].slice.call(doc.querySelectorAll('link[rel][href]'))
-      icon = links.find((_el) => _el.rel.includes('icon'))
-      icon = icon && icon.getAttribute('href')
+      // If there is no src then get the site icon
+      if (!icon) {
+        const links = [].slice.call(doc.querySelectorAll('link[rel][href]'))
+        icon = links.find((_el) => _el.rel.includes('icon'))
+        icon = icon && icon.getAttribute('href')
+      }
+
+      // If `icon` is not the ['https://', 'http://', '//'] protocol, splice on the `origin` of the a tag
+      if (!isHttp(icon)) icon = new URL(link).origin + icon
+
+      cardLink.cache[link] = { title, link, icon }
+
+      renderer(el, title, link, icon)
     }
-
-    // If `icon` is not the ['https://', 'http://', '//'] protocol, splice on the `origin` of the a tag
-    if (!isHttp(icon)) icon = new URL(link).origin + icon
-
-    const dom = createDOM(title, link, icon)
-
-    // Reset the attribute
-    Array.from(el.attributes).forEach((attr) => {
-      dom.querySelector('a').setAttribute(attr.name, attr.value)
-    })
-    el.parentNode.replaceChild(dom, el)
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn('CardLink Error: Failed to parse')
   }
 }
 
@@ -181,7 +194,6 @@ function fetchPage(link, callback) {
       fetchPage(server + link, callback)
     })
 }
-
 /**
  * Create card links
  * @param {NodeList} nodes A collection of nodes or a collection of arrays, if it is an array then the array must always contain node element
@@ -194,6 +206,10 @@ export default function cardLink(nodes) {
     if (el.nodeType !== 1) return
     el.removeAttribute('cardlink')
     const link = el.href
+
+    const cache = cardLink.cache[link]
+    if (cache) return renderer(el, cache.title, cache.link, cache.icon)
+
     if (isHttp(link)) {
       fetchPage(link, (html) => {
         getInfo(el, html, link)

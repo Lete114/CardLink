@@ -3,6 +3,7 @@ var styles = ".card-link{position:relative;width:100%;min-width:200px;max-width:
 var style = createElement('style');
 style.textContent = styles;
 document.head.appendChild(style);
+cardLink.cache = {};
 /**
  * Determine if it is a ['https://', 'http://', '//'] protocol
  * @param {String} url Website url
@@ -129,6 +130,15 @@ function createDOM(title, link, icon) {
   appendChild(wrapDOM, aDOM);
   return wrapDOM;
 }
+
+function renderer(el, title, link, icon) {
+  var dom = createDOM(title, link, icon); // Reset the attribute
+
+  Array.from(el.attributes).forEach(function (attr) {
+    dom.querySelector('a').setAttribute(attr.name, attr.value);
+  });
+  el.parentNode.replaceChild(dom, el);
+}
 /**
  * Get info
  * @param {Element} el Element
@@ -139,34 +149,39 @@ function createDOM(title, link, icon) {
 
 
 function getInfo(el, html, link) {
-  var title, icon;
-  var doc = new DOMParser().parseFromString(html, 'text/html'); // If there is no title, no card link is generated
+  try {
+    var title, icon;
+    var doc = new DOMParser().parseFromString(html, 'text/html'); // If there is no title, no card link is generated
 
-  title = doc.querySelector('title');
+    title = doc.querySelector('title');
 
-  if (title) {
-    title = title.textContent; // Get the src of the first img tag in the body tag
+    if (title) {
+      title = title.textContent; // Get the src of the first img tag in the body tag
 
-    icon = doc.querySelector('body img');
-    icon = icon && icon.getAttribute('src');
-    if (/^data:image/.test(icon)) icon = ''; // If there is no src then get the site icon
+      icon = doc.querySelector('body img');
+      icon = icon && icon.getAttribute('src');
+      if (/^data:image/.test(icon)) icon = ''; // If there is no src then get the site icon
 
-    if (!icon) {
-      var links = [].slice.call(doc.querySelectorAll('link[rel][href]'));
-      icon = links.find(function (_el) {
-        return _el.rel.includes('icon');
-      });
-      icon = icon && icon.getAttribute('href');
-    } // If `icon` is not the ['https://', 'http://', '//'] protocol, splice on the `origin` of the a tag
+      if (!icon) {
+        var links = [].slice.call(doc.querySelectorAll('link[rel][href]'));
+        icon = links.find(function (_el) {
+          return _el.rel.includes('icon');
+        });
+        icon = icon && icon.getAttribute('href');
+      } // If `icon` is not the ['https://', 'http://', '//'] protocol, splice on the `origin` of the a tag
 
 
-    if (!isHttp(icon)) icon = new URL(link).origin + icon;
-    var dom = createDOM(title, link, icon); // Reset the attribute
-
-    Array.from(el.attributes).forEach(function (attr) {
-      dom.querySelector('a').setAttribute(attr.name, attr.value);
-    });
-    el.parentNode.replaceChild(dom, el);
+      if (!isHttp(icon)) icon = new URL(link).origin + icon;
+      cardLink.cache[link] = {
+        title: title,
+        link: link,
+        icon: icon
+      };
+      renderer(el, title, link, icon);
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn('CardLink Error: Failed to parse');
   }
 }
 
@@ -194,6 +209,8 @@ function cardLink(nodes) {
     if (el.nodeType !== 1) return;
     el.removeAttribute('cardlink');
     var link = el.href;
+    var cache = cardLink.cache[link];
+    if (cache) return renderer(el, cache.title, cache.link, cache.icon);
 
     if (isHttp(link)) {
       fetchPage(link, function (html) {
