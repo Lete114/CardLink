@@ -21,6 +21,12 @@
   background-color: hsla(0, 0%, 96.5%, 0.88);
   box-sizing: border-box;
 }
+.card-link [cardlink-left] .card-link-text {
+  order: 1;
+}
+.card-link [cardlink-left] .card-link-icon {
+  margin: 0 8px 0 0;
+}
 .card-link .card-link-text {
   flex: 1;
 }
