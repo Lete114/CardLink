@@ -5,12 +5,47 @@ var styles = ".card-link{position:relative;width:100%;min-width:200px;max-width:
 var style = createElement('style');
 style.textContent = styles;
 document.head.appendChild(style);
-cardLink.cache = {};
+var proxyHandler = {
+  set: function set(target, name, value) {
+    verifyParams(value, ['title', 'link', 'icon']);
+    name = indexHandler(name);
+    target[name] = value;
+    return true;
+  }
+};
+cardLink.cache = new Proxy({}, proxyHandler);
+/**
+ * Remove '/' and '/index.html'
+ * @param {String} params
+ * @returns { String }
+ */
+
+function indexHandler(params) {
+  var path = params.replace(/(\/index\.html|\/)*$/gi, '');
+  if (path.length === 0) path += '/';
+  return path;
+}
+/**
+ * @param {Object} param
+ * @param {Array} requiredParams
+ */
+
+
+function verifyParams(param, requiredParams) {
+  for (var index in requiredParams) {
+    var requiredParam = requiredParams[index];
+
+    if (!param[requiredParam]) {
+      throw new Error("Parameter '".concat(requiredParam, "' not legal"));
+    }
+  }
+}
 /**
  * Determine if it is a ['https://', 'http://', '//'] protocol
  * @param {String} url Website url
  * @returns {Boolean}
  */
+
 
 function isHttp(url) {
   return /^(https?:)?\/\//g.test(url);
@@ -183,7 +218,7 @@ function getInfo(el, html, link) {
     }
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.warn('CardLink Error: Failed to parse');
+    console.warn('CardLink Error: Failed to parse', error);
   }
 }
 

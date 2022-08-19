@@ -4,7 +4,39 @@ const style = createElement('style')
 style.textContent = styles
 document.head.appendChild(style)
 
-cardLink.cache = {}
+const proxyHandler = {
+  set(target, name, value) {
+    verifyParams(value, ['title', 'link', 'icon'])
+    name = indexHandler(name)
+    target[name] = value
+    return true
+  }
+}
+cardLink.cache = new Proxy({}, proxyHandler)
+
+/**
+ * Remove '/' and '/index.html'
+ * @param {String} params
+ * @returns { String }
+ */
+function indexHandler(params) {
+  let path = params.replace(/(\/index\.html|\/)*$/gi, '')
+  if (path.length === 0) path += '/'
+  return path
+}
+
+/**
+ * @param {Object} param
+ * @param {Array} requiredParams
+ */
+function verifyParams(param, requiredParams) {
+  for (const index in requiredParams) {
+    const requiredParam = requiredParams[index]
+    if (!param[requiredParam]) {
+      throw new Error(`Parameter '${requiredParam}' not legal`)
+    }
+  }
+}
 
 /**
  * Determine if it is a ['https://', 'http://', '//'] protocol
@@ -179,7 +211,7 @@ function getInfo(el, html, link) {
     }
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.warn('CardLink Error: Failed to parse')
+    console.warn('CardLink Error: Failed to parse', error)
   }
 }
 
@@ -194,6 +226,7 @@ function fetchPage(link, callback) {
       fetchPage(server + link, callback)
     })
 }
+
 /**
  * Create card links
  * @param {NodeList} nodes A collection of nodes or a collection of arrays, if it is an array then the array must always contain node element
