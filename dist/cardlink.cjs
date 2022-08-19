@@ -234,7 +234,8 @@ function fetchPage(link, callback) {
 }
 /**
  * Create card links
- * @param {NodeList} nodes A collection of nodes or a collection of arrays, if it is an array then the array must always contain node element
+ * @param {NodeList} nodes A collection of nodes or a collection of arrays,
+ * if it is an array then the array must always contain node element
  */
 
 
