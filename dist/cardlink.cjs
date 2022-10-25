@@ -7,7 +7,7 @@ style.textContent = styles;
 document.head.appendChild(style);
 var proxyHandler = {
   set: function set(target, name, value) {
-    verifyParams(value, ['title', 'link', 'icon']);
+    verifyParams(value, ['title', 'link']);
     name = indexHandler(name);
     target[name] = value;
     return true;
@@ -116,13 +116,16 @@ function createIcon(icon) {
     d: 'M177.152 384a357.546667 357.546667 0 0 0-23.552 128 357.546667 357.546667 0 0 0 23.552 128h140.245333a791.808 791.808 0 0 1-10.197333-128c0-44.714667 3.584-87.722667 10.197333-128H177.152z m24.405333-51.2h126.250667c15.786667-65.024 40.021333-120.405333 69.76-160.554667A359.466667 359.466667 0 0 0 201.557333 332.8zM844.8 378.709333V384h-138.197333c6.613333 40.277333 10.197333 83.285333 10.197333 128s-3.584 87.722667-10.197333 128H844.8v5.290667c16.512-41.216 25.6-86.186667 25.6-133.290667a357.418667 357.418667 0 0 0-25.6-133.290667zM822.442667 332.8a359.466667 359.466667 0 0 0-196.010667-160.554667c29.738667 40.149333 53.930667 95.573333 69.76 160.554667h126.293333zM369.365333 384a736.042667 736.042667 0 0 0-10.965333 128c0 45.354667 3.968 88.448 10.965333 128h285.269334c6.997333-39.552 10.965333-82.645333 10.965333-128s-3.968-88.448-10.965333-128H369.365333z m11.264-51.2h262.741334c-28.586667-108.032-80.725333-179.2-131.370667-179.2-50.645333 0-102.741333 71.168-131.370667 179.2z m-179.072 358.4a359.466667 359.466667 0 0 0 196.010667 160.554667c-29.738667-40.149333-53.930667-95.573333-69.76-160.554667h-126.293333z m620.885334 0h-126.250667c-15.786667 65.024-40.021333 120.405333-69.76 160.554667a359.466667 359.466667 0 0 0 196.010667-160.554667z m-441.813334 0c28.586667 108.032 80.725333 179.2 131.370667 179.2 50.645333 0 102.741333-71.168 131.370667-179.2H380.629333zM512 921.6a409.6 409.6 0 1 1 0-819.2 409.6 409.6 0 0 1 0 819.2z'
   });
   appendChild(svg, path);
-  var img = createElement('img', 'card-link-icon');
-  img.src = icon; // If icon is valid, replace `svgIcon` with `imgIcon`
 
-  img.onload = function () {
-    img.onload = null;
-    svg.parentNode.replaceChild(img, svg);
-  };
+  if (icon) {
+    var img = createElement('img', 'card-link-icon');
+    img.src = icon; // If icon is valid, replace `svgIcon` with `imgIcon`
+
+    img.onload = function () {
+      img.onload = null;
+      svg.parentNode.replaceChild(img, svg);
+    };
+  }
 
   return svg;
 }
@@ -208,7 +211,7 @@ function getInfo(el, html, link) {
       } // If `icon` is not the ['https://', 'http://', '//'] protocol, splice on the `origin` of the a tag
 
 
-      if (!isHttp(icon)) icon = new URL(link).origin + icon;
+      if (icon && !isHttp(icon)) icon = new URL(link).origin + icon;
       cardLink.cache[link] = {
         title: title,
         link: link,

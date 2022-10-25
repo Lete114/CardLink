@@ -6,7 +6,7 @@ document.head.appendChild(style)
 
 const proxyHandler = {
   set(target, name, value) {
-    verifyParams(value, ['title', 'link', 'icon'])
+    verifyParams(value, ['title', 'link'])
     name = indexHandler(name)
     target[name] = value
     return true
@@ -104,13 +104,15 @@ function createIcon(icon) {
   })
   appendChild(svg, path)
 
-  const img = createElement('img', 'card-link-icon')
-  img.src = icon
+  if (icon) {
+    const img = createElement('img', 'card-link-icon')
+    img.src = icon
 
-  // If icon is valid, replace `svgIcon` with `imgIcon`
-  img.onload = function () {
-    img.onload = null
-    svg.parentNode.replaceChild(img, svg)
+    // If icon is valid, replace `svgIcon` with `imgIcon`
+    img.onload = function () {
+      img.onload = null
+      svg.parentNode.replaceChild(img, svg)
+    }
   }
   return svg
 }
@@ -203,7 +205,7 @@ function getInfo(el, html, link) {
       }
 
       // If `icon` is not the ['https://', 'http://', '//'] protocol, splice on the `origin` of the a tag
-      if (!isHttp(icon)) icon = new URL(link).origin + icon
+      if (icon && !isHttp(icon)) icon = new URL(link).origin + icon
 
       cardLink.cache[link] = { title, link, icon }
 
