@@ -1,19 +1,45 @@
 'use strict';
 
-var styles = ".card-link{position:relative;width:100%;min-width:200px;max-width:400px;height:80px;margin:20px auto;border-radius:12px;overflow:hidden;}.card-link .card-link-content{text-decoration:none;position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:space-around;padding:12px;background-color:hsla(0,0%,96.5%,0.88);box-sizing:border-box;}.card-link [cardlink-left] .card-link-text{order:1;}.card-link [cardlink-left] .card-link-icon{margin:0 8px 0 0;}.card-link .card-link-text{flex:1;}.card-link .card-link-title{max-height:40px;font-size:16px;font-weight:500;line-height:1.25;color:#121212;margin:0 0 5px;letter-spacing:0.2px;word-break:break-all;display:-webkit-box;text-overflow:ellipsis;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;}.card-link .card-link-url{display:-webkit-box;font-size:13px;color:#999;margin:0;line-height:1.3;overflow:hidden;word-break:break-word;text-overflow:ellipsis;-webkit-box-orient:vertical;-webkit-line-clamp:1;}.card-link .card-link-url svg{float:left;margin:2px 5px 0 0;}.card-link .card-link-icon{width:60px;height:60px;margin:0 0 0 8px;overflow:hidden;border-radius:6px;object-fit:contain;}";
+/**
+ * Creating element
+ * @param {String} name Element Name
+ * @param {String} className Element className
+ * @returns {HTMLElement}
+ */
+function createElement(name, className) {
+  var dom = document.createElement(name);
+  if (className) dom.className = className;
+  return dom;
+}
+/**
+ * Creates svg element
+ * @param {String} name Element Name
+ * @returns {SVGElementTagNameMap}
+ */
 
-var style = createElement('style');
-style.textContent = styles;
-document.head.appendChild(style);
-var proxyHandler = {
-  set: function set(target, name, value) {
-    verifyParams(value, ['title', 'link']);
-    name = indexHandler(name);
-    target[name] = value;
-    return true;
+function createSVG(name) {
+  return document.createElementNS('http://www.w3.org/2000/svg', name);
+}
+/**
+ * Set element attribute
+ * @param {HTMLElement} el Element
+ * @param {Object} obj Objects of key-value pairs
+ */
+
+function setAttribute(el, obj) {
+  for (var key in obj) {
+    el.setAttribute(key, obj[key]);
   }
-};
-cardLink.cache = new Proxy({}, proxyHandler);
+}
+/**
+ * Append child node or element
+ * @param {HTMLElement} el Element
+ * @param {Node} child The node to append to the given parent node (commonly an element).
+ */
+
+function appendChild(el, child) {
+  el.appendChild(child);
+}
 /**
  * Remove '/' and '/index.html'
  * @param {String} params
@@ -30,7 +56,6 @@ function indexHandler(params) {
  * @param {Array} requiredParams
  */
 
-
 function verifyParams(param, requiredParams) {
   for (var index in requiredParams) {
     var requiredParam = requiredParams[index];
@@ -46,61 +71,21 @@ function verifyParams(param, requiredParams) {
  * @returns {Boolean}
  */
 
-
 function isHttp(url) {
   return /^(https?:)?\/\//g.test(url);
 }
-/**
- * Creating element
- * @param {String} name Element Name
- * @param {String} className Element className
- * @returns {HTMLElement}
- */
 
+var styles = ".card-link{position:relative;width:100%;min-width:200px;max-width:400px;height:80px;margin:20px auto;border-radius:12px;overflow:hidden;}.card-link .card-link-content{text-decoration:none;position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:space-around;padding:12px;background-color:hsla(0,0%,96.5%,0.88);box-sizing:border-box;}.card-link [cardlink-left] .card-link-text{order:1;}.card-link [cardlink-left] .card-link-icon{margin:0 8px 0 0;}.card-link .card-link-text{flex:1;}.card-link .card-link-title{max-height:40px;font-size:16px;font-weight:500;line-height:1.25;color:#121212;margin:0 0 5px;letter-spacing:0.2px;word-break:break-all;display:-webkit-box;text-overflow:ellipsis;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;}.card-link .card-link-url{display:-webkit-box;font-size:13px;color:#999;margin:0;line-height:1.3;overflow:hidden;word-break:break-word;text-overflow:ellipsis;-webkit-box-orient:vertical;-webkit-line-clamp:1;}.card-link .card-link-url svg{float:left;margin:2px 5px 0 0;}.card-link .card-link-icon{width:60px;height:60px;margin:0 0 0 8px;overflow:hidden;border-radius:6px;object-fit:contain;}";
 
-function createElement(name, className) {
-  var dom = document.createElement(name);
-  if (className) dom.className = className;
-  return dom;
-}
-/**
- * Creates svg element
- * @param {String} name Element Name
- * @returns {SVGElementTagNameMap}
- */
+var style = createElement('style');
+style.textContent = styles;
+document.head.appendChild(style);
 
-
-function createSVG(name) {
-  return document.createElementNS('http://www.w3.org/2000/svg', name);
-}
-/**
- * Set element attribute
- * @param {HTMLElement} el Element
- * @param {Object} obj Objects of key-value pairs
- */
-
-
-function setAttribute(el, obj) {
-  for (var key in obj) {
-    el.setAttribute(key, obj[key]);
-  }
-}
-/**
- * Append child node or element
- * @param {HTMLElement} el Element
- * @param {Node} child The node to append to the given parent node (commonly an element).
- */
-
-
-function appendChild(el, child) {
-  el.appendChild(child);
-}
 /**
  * Create card link icon
  * @param {String} icon Icon URL
  * @returns {SVGElementTagNameMap}
  */
-
 
 function createIcon(icon) {
   var svg = createSVG('svg');
@@ -179,16 +164,15 @@ function renderer(el, title, link, icon) {
   });
   el.parentNode.replaceChild(dom, el);
 }
+
 /**
  * Get info
- * @param {Element} el Element
  * @param {String} html String type html
  * @param {String} link Website address
  */
 // eslint-disable-next-line max-statements
 
-
-function getInfo(el, html, link) {
+function parse (html, link) {
   try {
     var title, icon;
     var doc = new DOMParser().parseFromString(html, 'text/html'); // If there is no title, no card link is generated
@@ -212,18 +196,29 @@ function getInfo(el, html, link) {
 
 
       if (icon && !isHttp(icon)) icon = new URL(link).origin + icon;
-      cardLink.cache[link] = {
+      return {
         title: title,
         link: link,
         icon: icon
       };
-      renderer(el, title, link, icon);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn('CardLink Error: Failed to parse', error);
   }
+
+  return {};
 }
+
+var proxyHandler = {
+  set: function set(target, name, value) {
+    verifyParams(value, ['title', 'link']);
+    name = indexHandler(name);
+    target[name] = value;
+    return true;
+  }
+};
+cardLink.cache = new Proxy({}, proxyHandler);
 
 function fetchPage(link, callback) {
   fetch(link).then(function (result) {
@@ -249,13 +244,23 @@ function cardLink(nodes) {
     // If it is not a tag element then it is not processed
     if (el.nodeType !== 1) return;
     el.removeAttribute('cardlink');
-    var link = el.href;
-    var cache = cardLink.cache[link];
+    var href = el.href;
+    var cache = cardLink.cache[href];
     if (cache) return renderer(el, cache.title, cache.link, cache.icon);
 
-    if (isHttp(link)) {
-      fetchPage(link, function (html) {
-        getInfo(el, html, link);
+    if (isHttp(href)) {
+      fetchPage(href, function (html) {
+        var _parse = parse(html, href),
+            title = _parse.title,
+            link = _parse.link,
+            icon = _parse.icon;
+
+        cardLink.cache[link] = {
+          title: title,
+          link: link,
+          icon: icon
+        };
+        renderer(el, title, link, icon);
       });
     }
   });

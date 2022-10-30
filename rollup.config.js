@@ -10,12 +10,21 @@ const name = 'cardLink'
 
 const plugins = [
   !production && serve({ port: 6870, host: '127.0.0.1', contentBase: ['dist', 'public'] }),
-  production && del({ targets: 'dist/*' }),
   babel({ babelHelpers: 'bundled', presets: ['@babel/preset-env'] }),
   css({ minify: true })
 ]
 
 export default [
+  {
+    input: 'src/parse.js',
+    plugins: [...plugins, production && del({ targets: 'dist/*' })],
+    output: {
+      format: 'umd',
+      name:'cardLinkParse',
+      file: 'dist/parse.js',
+      plugins: [production && terser()]
+    }
+  },
   {
     input,
     plugins,
