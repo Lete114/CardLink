@@ -1,9 +1,9 @@
 {
   "name": "cardlink-server",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "start:hot": "nodemon server.js"
+    "start": "node index.js",
+    "start:hot": "nodemon index.js"
   },
   "repository": {
     "type": "git",
