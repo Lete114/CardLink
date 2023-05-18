@@ -70,8 +70,6 @@ Browser
 
 ## Problems
 
-> The [server](https://github.com/Lete114/CardLink/tree/server)  branch has an example
-
 Since this is a front-end request for HTML, some sites may have cross-domain (CORS) issues, so `cardLink` allows you to use a proxy server to request HTML from the target site
 
 ```html
@@ -79,7 +77,6 @@ Since this is a front-end request for HTML, some sites may have cross-domain (CO
   // Note: cardLink sends requests to the proxy server only when cross-domain requests occur (thus reducing the pressure on the proxy server)
   // Preset the proxy server before executing cardLink
   cardLink.server = 'https://api.allorigins.win/raw?url='
-  // cardLink.server = 'https://cardlink-server.deta.dev/?url='
 
   cardLink(document.querySelectorAll('article a[target=_blank]'))
 </script>

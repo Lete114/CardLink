@@ -71,8 +71,6 @@ const cardLink = require('cardlink')
 
 ## 存在的问题
 
-> [server](https://github.com/Lete114/CardLink/tree/server) 分支有一个例子
-
 由于这是前端发送请求获取 HTML，可能部分网站会存在跨域 (CORS) 问题，所以 `cardLink` 允许你使用代理服务器去请求目标网站的 HTML
 
 ```html
@@ -80,7 +78,6 @@ const cardLink = require('cardlink')
   // 注意: 只有发生跨域请求时，cardLink 才会将请求发送到代理服务器(以此可以减轻代理服务器的压力)
   // 在执行 cardLink 之前预设代理服务器
   cardLink.server = 'https://api.allorigins.win/raw?url='
-  // cardLink.server = 'https://cardlink-server.deta.dev/?url='
 
   // 为<article></article>(文章)标签下所有打开新标签窗口的a标签生成卡片链接
   cardLink(document.querySelectorAll('article a[target=_blank]'))
