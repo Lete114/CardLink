@@ -7,5 +7,6 @@ export default function cardLink(nodes: NodeList): void;
  * parse
  * @param {String} html String type html
  * @param {String} link Website address
+ * @returns {{ title: string; link: string; icon: string }} Website info
  */
 export default function cardLinkParse(html: string, link: string): { title: string; link: string; icon: string };

@@ -1,6 +1,6 @@
 {
   "name": "cardlink",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "为页面上的超链接生成卡片式链接 | Generate card-based links for hyperlinks on the page",
   "main": "dist/cardlink.cjs",
   "module": "dist/cardlink.mjs",
@@ -12,6 +12,17 @@
     "dev": "rollup -c -w",
     "lint": "npx eslint src && npx prettier --check src",
     "lint:fix": "npx eslint --fix src && npx prettier --check --write src"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/cardlink.mjs",
+      "require": "./dist/cardlink.cjs",
+      "default": "./dist/cardlink.js"
+    },
+    "./parse": {
+      "import": "./src/parse.js",
+      "default": "./dist/parse.js"
+    }
   },
   "repository": {
     "type": "git",
